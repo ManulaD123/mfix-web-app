@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import { signIn } from "@/lib/auth-client";
+import { redirect } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -11,12 +13,14 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 export default function LogingForm({ title }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [isLoading, setLoading] = useState(false);
 
   const validateForm = () => {
     if (!email) {
@@ -36,11 +40,26 @@ export default function LogingForm({ title }) {
     return true;
   };
 
-  const handleSubmitForm = (e) => {
+  const handleSubmitForm = async (e) => {
     e.preventDefault();
     const isValid = validateForm();
     if (isValid) {
-      console.log({ email: email, password: password });
+      setLoading(true);
+      await signIn.email(
+        {
+          email,
+          password,
+        },
+        {
+          onSuccess: () => {
+            redirect("/dashboard");
+          },
+          onError: (ctx) => {
+            console.log(ctx.error.message);
+          },
+        }
+      );
+      setLoading(false);
     }
   };
   return (
@@ -120,7 +139,9 @@ export default function LogingForm({ title }) {
             <Button
               type="submit"
               className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mt-4"
+              disabled={isLoading}
             >
+              {isLoading && <Loader2 className="animate-spin" />}
               Sign in
             </Button>
           </CardContent>
