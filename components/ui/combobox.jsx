@@ -127,7 +127,7 @@ const ComboboxProgress = React.forwardRef(({ className, ...props }, ref) => (
     Loading...
   </ComboboxPrimitive.Progress>
 ));
-//ComboboxProgress.displayName=ComboboxPrimitive.ComboboxProgress.displayName
+ComboboxProgress.displayName = ComboboxPrimitive.ComboboxProgress.displayName;
 
 const ComboboxEmpty = React.forwardRef(({ className, ...props }, ref) => (
   <ComboboxPrimitive.Empty

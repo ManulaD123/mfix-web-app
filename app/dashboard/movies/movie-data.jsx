@@ -35,7 +35,7 @@ export default async function MovieData() {
     return (
       <div className="flex justify-center items-center h-[186.5px]">
         <p className="text-red-700 font-medium animate-pulse duration-1000">
-          Movie's Not Available
+          Movies Not Available
         </p>
       </div>
     );

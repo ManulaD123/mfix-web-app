@@ -1,3 +1,9 @@
+import MoviesPage from "./movies/page";
+
 export default function DashboardPage() {
-  return <div>Dashboard Page</div>;
+  return (
+    <div>
+      <MoviesPage />
+    </div>
+  );
 }

@@ -10,7 +10,7 @@ export default async function authMiddleware(request) {
   });
 
   if (!session) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));  //"/login"
+    return NextResponse.redirect(new URL("/login", request.url)); //"/login"
   }
   return NextResponse.next();
 }
