@@ -12,10 +12,15 @@ import {
 import Image from "next/image";
 import { useState } from "react";
 import EditMovieForm from "./edit-movie-form";
-import { updateMovie } from "@/lib/actions/movies";
+import DeleteMovieDialog from "./delete-movie-dialogBox";
+import { updateMovie, deleteMovie } from "@/lib/actions/movies";
+
 export default function MovieTable({ movies }) {
   const [isSaving, setIsSaving] = useState(false);
   const [editingMovie, setEditingMovie] = useState(null);
+  const [isDeleting, setDeleting] = useState(false);
+  const [deletingMovie, setDeletingMovie] = useState(null);
+
   const router = useRouter();
 
   const handleEdit = (movie) => {
@@ -44,7 +49,23 @@ export default function MovieTable({ movies }) {
     }
   };
 
-  const handleDelete = () => {};
+  //----------Delete Movie---------------------------
+
+  const handleDeleteMovie = (movie) => {
+    setDeletingMovie(movie);
+  };
+
+  const handleDeleteConfirm = async (movieId) => {
+    setDeleting(true);
+    const resp = await deleteMovie(movieId);
+    setDeleting(false);
+
+    if (resp?.success) {
+      setDeletingMovie(null);
+      router.refresh();
+    }
+  };
+
   return (
     <div>
       <Table>
@@ -84,7 +105,6 @@ export default function MovieTable({ movies }) {
                     size="sm"
                     className="min-w-[120px]"
                     onClick={() => handleEdit(movie)}
-                    handleDelete
                   >
                     Edit
                   </Button>
@@ -92,7 +112,7 @@ export default function MovieTable({ movies }) {
                     variant="destructive"
                     size="sm"
                     className="min-w-[120px]"
-                    onClick={() => handleDelete(movie)}
+                    onClick={() => handleDeleteMovie(movie)}
                   >
                     Delete
                   </Button>
@@ -109,6 +129,15 @@ export default function MovieTable({ movies }) {
           onSubmit={handleEditSubmit}
           onCancel={() => setEditingMovie(null)}
           isLoading={isSaving}
+        />
+      )}
+      {deletingMovie && (
+        <DeleteMovieDialog
+          movie={deletingMovie}
+          open={true}
+          onCancel={() => setDeletingMovie(null)}
+          onConfirm={() => handleDeleteConfirm(deletingMovie?.id)}
+          isLoading={isDeleting}
         />
       )}
     </div>
