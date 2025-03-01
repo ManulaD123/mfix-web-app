@@ -68,7 +68,7 @@ export default function AddMovieForm() {
   };
 
   return (
-    <Card className="max-w-2xl mx-auto">
+    <Card className="max-w-2xl mx-auto ">
       <CardHeader>
         <CardTitle>Add Movie</CardTitle>
         <CardDescription>Add a movie to the Mflix database.</CardDescription>
